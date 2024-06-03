@@ -1,0 +1,78 @@
+{
+  "resourceType": "Patient",
+  "id": "example-patient",
+  "meta": {
+    "profile": [
+      "http://fhir.ch/ig/ch-core/StructureDefinition/ch-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "http://fhir.ch/ig/ch-core/ValueSet/naming-system-chn",
+      "value": "7561234567890"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Muster",
+      "given": [
+        "Max"
+      ],
+      "prefix": [
+        "Dr."
+      ]
+    }
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "+41 79 123 45 67",
+      "use": "mobile"
+    },
+    {
+      "system": "email",
+      "value": "max.muster@example.com",
+      "use": "home"
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1980-01-01",
+  "address": [
+    {
+      "use": "home",
+      "type": "both",
+      "line": [
+        "Musterstrasse 1"
+      ],
+      "city": "Musterstadt",
+      "postalCode": "1234",
+      "country": "CH"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "M",
+        "display": "Married"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "de-CH",
+            "display": "Swiss German"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}
