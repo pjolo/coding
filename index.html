@@ -23,6 +23,27 @@
             text-align: center;
             color: #333;
         }
+        .tab {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .tab div {
+            padding: 10px 20px;
+            background-color: #ddd;
+            border-radius: 8px 8px 0 0;
+        }
+        .tab div.active {
+            background-color: #fff;
+            border-bottom: 2px solid #fff;
+        }
+        .content {
+            display: none;
+        }
+        .content.active {
+            display: block;
+        }
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -54,23 +75,43 @@
 <body>
     <div class="container">
         <h1>Patienteninformationen</h1>
-        <div id="patient-info" class="grid-container">
+        <div class="tab">
+            <div id="tab-patient" class="active">Patient</div>
+            <div id="tab-medication">Medikation</div>
+        </div>
+        <div id="patient-info" class="content active grid-container">
             <!-- Patienteninformationen werden hier dynamisch eingefügt -->
         </div>
-        <h1>Medikation</h1>
-        <div id="medication-info" class="grid-container">
+        <div id="medication-info" class="content grid-container">
             <!-- MedicationStatement Informationen werden hier dynamisch eingefügt -->
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const tabPatient = document.getElementById('tab-patient');
+            const tabMedication = document.getElementById('tab-medication');
+            const patientInfo = document.getElementById('patient-info');
+            const medicationInfo = document.getElementById('medication-info');
+
+            tabPatient.addEventListener('click', function () {
+                tabPatient.classList.add('active');
+                tabMedication.classList.remove('active');
+                patientInfo.classList.add('active');
+                medicationInfo.classList.remove('active');
+            });
+
+            tabMedication.addEventListener('click', function () {
+                tabMedication.classList.add('active');
+                tabPatient.classList.remove('active');
+                medicationInfo.classList.add('active');
+                patientInfo.classList.remove('active');
+            });
+
             // Patienteninformationen laden
             fetch('patient.json')
                 .then(response => response.json())
                 .then(data => {
-                    const patientInfo = document.getElementById('patient-info');
-
                     patientInfo.innerHTML = `
                         <div class="grid-item">
                             <h2>Basisinformationen</h2>
@@ -112,8 +153,6 @@
             fetch('emed.json')
                 .then(response => response.json())
                 .then(data => {
-                    const medicationInfo = document.getElementById('medication-info');
-
                     medicationInfo.innerHTML = `
                         <div class="grid-item">
                             <h2>Medikation</h2>
@@ -121,9 +160,21 @@
                             <p><span>ATC-Code:</span> ${data.medicationCodeableConcept.coding[0].code}</p>
                         </div>
                         <div class="grid-item">
+                            <h2>Patient</h2>
+                            <p><span>Patientenreferenz:</span> ${data.subject.reference}</p>
+                        </div>
+                        <div class="grid-item">
                             <h2>Zeitraum</h2>
                             <p><span>Beginn:</span> ${data.effectivePeriod.start}</p>
                             <p><span>Ende:</span> ${data.effectivePeriod.end}</p>
+                        </div>
+                        <div class="grid-item">
+                            <h2>Datum der Erklärung</h2>
+                            <p><span>Datum:</span> ${data.dateAsserted}</p>
+                        </div>
+                        <div class="grid-item">
+                            <h2>Informationsquelle</h2>
+                            <p><span>Quelle:</span> ${data.informationSource.reference}</p>
                         </div>
                         <div class="grid-item">
                             <h2>Dosierung</h2>
