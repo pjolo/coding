@@ -23,27 +23,6 @@
             text-align: center;
             color: #333;
         }
-        .tab {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .tab div {
-            padding: 10px 20px;
-            background-color: #ddd;
-            border-radius: 8px 8px 0 0;
-        }
-        .tab div.active {
-            background-color: #fff;
-            border-bottom: 2px solid #fff;
-        }
-        .content {
-            display: none;
-        }
-        .content.active {
-            display: block;
-        }
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -75,43 +54,21 @@
 <body>
     <div class="container">
         <h1>Patienteninformationen</h1>
-        <div class="tab">
-            <div id="tab-patient" class="active">Patient</div>
-            <div id="tab-medication">Medikation</div>
-        </div>
-        <div id="patient-info" class="content active grid-container">
+        <div id="patient-info" class="grid-container">
             <!-- Patienteninformationen werden hier dynamisch eingefügt -->
         </div>
-        <div id="medication-info" class="content grid-container">
+        <h1>Medikation</h1>
+        <div id="medication-info" class="grid-container">
             <!-- MedicationStatement Informationen werden hier dynamisch eingefügt -->
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const tabPatient = document.getElementById('tab-patient');
-            const tabMedication = document.getElementById('tab-medication');
-            const patientInfo = document.getElementById('patient-info');
-            const medicationInfo = document.getElementById('medication-info');
-
-            tabPatient.addEventListener('click', function () {
-                tabPatient.classList.add('active');
-                tabMedication.classList.remove('active');
-                patientInfo.classList.add('active');
-                medicationInfo.classList.remove('active');
-            });
-
-            tabMedication.addEventListener('click', function () {
-                tabMedication.classList.add('active');
-                tabPatient.classList.remove('active');
-                medicationInfo.classList.add('active');
-                patientInfo.classList.remove('active');
-            });
-
             // Patienteninformationen laden
             fetch('patient.json')
                 .then(response => response.json())
                 .then(data => {
+                    const patientInfo = document.getElementById('patient-info');
                     patientInfo.innerHTML = `
                         <div class="grid-item">
                             <h2>Basisinformationen</h2>
@@ -148,11 +105,11 @@
                     `;
                 })
                 .catch(error => console.error('Fehler beim Laden der Patientendaten:', error));
-
             // MedicationStatement Informationen laden
             fetch('emed.json')
                 .then(response => response.json())
                 .then(data => {
+                    const medicationInfo = document.getElementById('medication-info');
                     medicationInfo.innerHTML = `
                         <div class="grid-item">
                             <h2>Medikation</h2>
@@ -179,6 +136,17 @@
                         <div class="grid-item">
                             <h2>Dosierung</h2>
                             <p><span>Text:</span> ${data.dosage[0].text}</p>
+
+    
+          
+            
+    
+
+          
+          Expand Down
+    
+    
+  
                             <p><span>Häufigkeit:</span> ${data.dosage[0].timing.repeat.frequency} Mal pro ${data.dosage[0].timing.repeat.periodUnit}</p>
                             <p><span>Route:</span> ${data.dosage[0].route.coding[0].display}</p>
                             <p><span>Menge:</span> ${data.dosage[0].doseAndRate[0].doseQuantity.value} ${data.dosage[0].doseAndRate[0].doseQuantity.unit}</p>
