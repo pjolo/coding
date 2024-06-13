@@ -1,0 +1,257 @@
+{
+  "resourceType": "Bundle",
+  "id": "ips-example",
+  "type": "document",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "example-patient",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips"
+          ]
+        },
+        "identifier": [
+          {
+            "use": "official",
+            "system": "http://fhir.ch/ig/ch-core/ValueSet/naming-system-chn",
+            "value": "7561234567890"
+          }
+        ],
+        "active": true,
+        "name": [
+          {
+            "use": "official",
+            "family": "Muster",
+            "given": [
+              "Max"
+            ],
+            "prefix": [
+              "Dr."
+            ]
+          }
+        ],
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "+41 79 123 45 67",
+            "use": "mobile"
+          },
+          {
+            "system": "email",
+            "value": "max.muster@example.com",
+            "use": "home"
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1980-01-01",
+        "address": [
+          {
+            "use": "home",
+            "type": "both",
+            "line": [
+              "Musterstrasse 1"
+            ],
+            "city": "Musterstadt",
+            "postalCode": "1234",
+            "country": "CH"
+          }
+        ],
+        "maritalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+              "code": "M",
+              "display": "Married"
+            }
+          ]
+        },
+        "communication": [
+          {
+            "language": {
+              "coding": [
+                {
+                  "system": "urn:ietf:bcp:47",
+                  "code": "de-CH",
+                  "display": "Swiss German"
+                }
+              ]
+            },
+            "preferred": true
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationStatement",
+        "id": "emed-example",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/MedicationStatement-uv-ips"
+          ]
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.whocc.no/atc",
+              "code": "N02BE01",
+              "display": "Paracetamol"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/example-patient"
+        },
+        "effectivePeriod": {
+          "start": "2023-01-01",
+          "end": "2023-12-31"
+        },
+        "dateAsserted": "2023-01-01",
+        "informationSource": {
+          "reference": "Practitioner/example-practitioner"
+        },
+        "dosage": [
+          {
+            "sequence": 1,
+            "text": "1 Tablette, oral, einmal täglich",
+            "timing": {
+              "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "periodUnit": "d"
+              }
+            },
+            "route": {
+              "coding": [
+                {
+                  "system": "http://snomed.info/sct",
+                  "code": "26643006",
+                  "display": "Oral route"
+                }
+              ]
+            },
+            "doseAndRate": [
+              {
+                "type": {
+                  "coding": [
+                    {
+                      "system": "http://terminology.hl7.org/CodeSystem/dose-rate-type",
+                      "code": "ordered",
+                      "display": "Ordered"
+                    }
+                  ]
+                },
+                "doseQuantity": {
+                  "value": 1,
+                  "unit": "tablet"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "immunization-example",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/Immunization-uv-ips"
+          ]
+        },
+        "status": "completed",
+        "vaccineCode": {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/sid/cvx",
+              "code": "207",
+              "display": "COVID-19 vaccine"
+            }
+          ]
+        },
+        "patient": {
+          "reference": "Patient/example-patient"
+        },
+        "occurrenceDateTime": "2023-02-01",
+        "primarySource": true,
+        "lotNumber": "12345",
+        "performer": [
+          {
+            "actor": {
+              "display": "Dr. Impf Arzt"
+            }
+          }
+        ],
+        "location": {
+          "display": "Musterklinik"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "allergy-example",
+        "meta": {
+          "profile": [
+            "http://hl7.org/fhir/uv/ips/StructureDefinition/AllergyIntolerance-uv-ips"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              "code": "active",
+              "display": "Active"
+            }
+          ]
+        },
+        "verificationStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+              "code": "confirmed",
+              "display": "Confirmed"
+            }
+          ]
+        },
+        "type": "allergy",
+        "category": [
+          "medication"
+        ],
+        "criticality": "high",
+        "code": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "2670",
+              "display": "Penicillin"
+            }
+          ]
+        },
+        "patient": {
+          "reference": "Patient/example-patient"
+        },
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "39579001",
+                    "display": "Anaphylaxis"
+                  }
+                ]
+              }
+            ],
+            "severity": "severe"
+          }
+        ]
+      }
+    }
+  ]
+}
