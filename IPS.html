@@ -23,26 +23,11 @@
             text-align: center;
             color: #333;
         }
-        .tab {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            cursor: pointer;
-        }
-        .tab div {
-            padding: 10px 20px;
-            background-color: #ddd;
-            border-radius: 8px 8px 0 0;
-        }
-        .tab div.active {
-            background-color: #fff;
-            border-bottom: 2px solid #fff;
-        }
-        .content {
-            display: none;
-        }
-        .content.active {
-            display: block;
+        .section-title {
+            color: #666;
+            margin-top: 40px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
         }
         .grid-container {
             display: grid;
@@ -78,58 +63,26 @@
         <div id="patient-info" class="grid-container">
             <!-- Patienteninformationen werden hier dynamisch eingefügt -->
         </div>
-        <div class="tab">
-            <div id="tab-medication" class="active">Medikation</div>
-            <div id="tab-immunizations">Impfungen</div>
-            <div id="tab-allergies">Allergien</div>
-        </div>
-        <div id="medication-info" class="content active grid-container">
+        <h2 class="section-title">Medikation</h2>
+        <div id="medication-info" class="grid-container">
             <!-- Medication Informationen werden hier dynamisch eingefügt -->
         </div>
-        <div id="immunization-info" class="content grid-container">
+        <h2 class="section-title">Impfungen</h2>
+        <div id="immunization-info" class="grid-container">
             <!-- Immunization Informationen werden hier dynamisch eingefügt -->
         </div>
-        <div id="allergy-info" class="content grid-container">
+        <h2 class="section-title">Allergien</h2>
+        <div id="allergy-info" class="grid-container">
             <!-- Allergy Informationen werden hier dynamisch eingefügt -->
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const tabMedication = document.getElementById('tab-medication');
-            const tabImmunizations = document.getElementById('tab-immunizations');
-            const tabAllergies = document.getElementById('tab-allergies');
+            const patientInfo = document.getElementById('patient-info');
             const medicationInfo = document.getElementById('medication-info');
             const immunizationInfo = document.getElementById('immunization-info');
             const allergyInfo = document.getElementById('allergy-info');
-            const patientInfo = document.getElementById('patient-info');
-
-            tabMedication.addEventListener('click', function () {
-                tabMedication.classList.add('active');
-                tabImmunizations.classList.remove('active');
-                tabAllergies.classList.remove('active');
-                medicationInfo.classList.add('active');
-                immunizationInfo.classList.remove('active');
-                allergyInfo.classList.remove('active');
-            });
-
-            tabImmunizations.addEventListener('click', function () {
-                tabImmunizations.classList.add('active');
-                tabMedication.classList.remove('active');
-                tabAllergies.classList.remove('active');
-                immunizationInfo.classList.add('active');
-                medicationInfo.classList.remove('active');
-                allergyInfo.classList.remove('active');
-            });
-
-            tabAllergies.addEventListener('click', function () {
-                tabAllergies.classList.add('active');
-                tabMedication.classList.remove('active');
-                tabImmunizations.classList.remove('active');
-                allergyInfo.classList.add('active');
-                medicationInfo.classList.remove('active');
-                immunizationInfo.classList.remove('active');
-            });
 
             // IPS Daten laden
             fetch('ips.json')
