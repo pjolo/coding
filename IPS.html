@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR International Patient Summary (IPS)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .section {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            padding: 20px;
+            width: 80%;
+        }
+        .section h2 {
+            margin-top: 0;
+        }
+        .section p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>FHIR International Patient Summary (IPS)</h1>
+    <div id="patient-data" class="section">
+        <h2>Patientendaten</h2>
+        <!-- Patientendaten hier -->
+    </div>
+    <div id="allergies" class="section">
+        <h2>Allergien</h2>
+        <!-- Allergien hier -->
+    </div>
+    <div id="medication" class="section">
+        <h2>Medikation</h2>
+        <!-- Medikation hier -->
+    </div>
+    <div id="problems" class="section">
+        <h2>Probleme/Diagnosen</h2>
+        <!-- Probleme/Diagnosen hier -->
+    </div>
+
+    <script>
+        async function fetchFHIRData() {
+            // Beispiel-FHIR-Server-URL
+            const fhirServerUrl = 'https://example.com/fhir';
+            // Patient-ID
+            const patientId = 'example-patient-id';
+
+            try {
+                // Patientendaten abrufen
+                const patientResponse = await fetch(`${fhirServerUrl}/Patient/${patientId}`);
+                const patientData = await patientResponse.json();
+                displayPatientData(patientData);
+
+                // Allergien abrufen
+                const allergiesResponse = await fetch(`${fhirServerUrl}/AllergyIntolerance?patient=${patientId}`);
+                const allergiesData = await allergiesResponse.json();
+                displayAllergies(allergiesData);
+
+                // Medikation abrufen
+                const medicationResponse = await fetch(`${fhirServerUrl}/MedicationRequest?patient=${patientId}`);
+                const medicationData = await medicationResponse.json();
+                displayMedication(medicationData);
+
+                // Probleme/Diagnosen abrufen
+                const problemsResponse = await fetch(`${fhirServerUrl}/Condition?patient=${patientId}`);
+                const problemsData = await problemsResponse.json();
+                displayProblems(problemsData);
+            } catch (error) {
+                console.error('Fehler beim Abrufen der FHIR-Daten:', error);
+            }
+        }
+
+        function displayPatientData(data) {
+            const patientSection = document.getElementById('patient-data');
+            patientSection.innerHTML += `<p><strong>Name:</strong> ${data.name[0].text}</p>`;
+            patientSection.innerHTML += `<p><strong>Geburtsdatum:</strong> ${data.birthDate}</p>`;
+        }
+
+        function displayAllergies(data) {
+            const allergiesSection = document.getElementById('allergies');
+            data.entry.forEach(entry => {
+                allergiesSection.innerHTML += `<p>${entry.resource.code.text}</p>`;
+            });
+        }
+
+        function displayMedication(data) {
+            const medicationSection = document.getElementById('medication');
+            data.entry.forEach(entry => {
+                medicationSection.innerHTML += `<p>${entry.resource.medicationCodeableConcept.text}</p>`;
+            });
+        }
+
+        function displayProblems(data) {
+            const problemsSection = document.getElementById('problems');
+            data.entry.forEach(entry => {
+                problemsSection.innerHTML += `<p>${entry.resource.code.text}</p>`;
+            });
+        }
+
+        // FHIR-Daten abrufen und anzeigen
+        fetchFHIRData();
+    </script>
+</body>
+</html>
