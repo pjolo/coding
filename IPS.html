@@ -55,18 +55,6 @@
             font-weight: bold;
             color: #333;
         }
-        .content-block {
-            margin-top: 20px;
-        }
-        .content-block p {
-            line-height: 1.6;
-            color: #555;
-            margin: 5px 0;
-        }
-        .content-block span {
-            font-weight: bold;
-            color: #333;
-        }
     </style>
 </head>
 <body>
@@ -76,19 +64,19 @@
             <!-- Patienteninformationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Medikation</h2>
-        <div id="medication-info" class="content-block">
+        <div id="medication-info" class="grid-container">
             <!-- Medication Informationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Impfungen</h2>
-        <div id="immunization-info" class="content-block">
+        <div id="immunization-info" class="grid-container">
             <!-- Immunization Informationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Allergien</h2>
-        <div id="allergy-info" class="content-block">
+        <div id="allergy-info" class="grid-container">
             <!-- Allergy Informationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Problemliste</h2>
-        <div id="condition-info" class="content-block">
+        <div id="condition-info" class="grid-container">
             <!-- Condition Informationen werden hier dynamisch eingefügt -->
         </div>
     </div>
@@ -149,35 +137,47 @@
 
                     // Medikation anzeigen
                     medicationInfo.innerHTML = medicationStatements.map(med => `
-                        <p><span>Medikament:</span> ${med.medicationCodeableConcept.coding[0].display}</p>
-                        <p><span>ATC-Code:</span> ${med.medicationCodeableConcept.coding[0].code}</p>
-                        <p><span>Zeitraum:</span> ${med.effectivePeriod.start} - ${med.effectivePeriod.end}</p>
-                        <p><span>Dosierung:</span> ${med.dosage[0].doseAndRate[0].doseQuantity.value} ${med.dosage[0].doseAndRate[0].doseQuantity.unit}</p>
-                        <p><span>Einnahmezeit:</span> ${med.dosage[0].timing.repeat.frequency} Mal pro ${med.dosage[0].timing.repeat.periodUnit}, um ${med.dosage[0].timing.repeat.timeOfDay.join(', ')}</p>
-                        <p><span>Route:</span> ${med.dosage[0].route.coding[0].display}</p>
+                        <div class="grid-item">
+                            <h2>Medikation</h2>
+                            <p><span>Medikament:</span> ${med.medicationCodeableConcept.coding[0].display}</p>
+                            <p><span>ATC-Code:</span> ${med.medicationCodeableConcept.coding[0].code}</p>
+                            <p><span>Zeitraum:</span> ${med.effectivePeriod.start} - ${med.effectivePeriod.end}</p>
+                            <p><span>Dosierung:</span> ${med.dosage[0].doseAndRate[0].doseQuantity.value} ${med.dosage[0].doseAndRate[0].doseQuantity.unit}</p>
+                            <p><span>Einnahmezeit:</span> ${med.dosage[0].timing.repeat.frequency} Mal pro ${med.dosage[0].timing.repeat.periodUnit}, um ${med.dosage[0].timing.repeat.timeOfDay.join(', ')}</p>
+                            <p><span>Route:</span> ${med.dosage[0].route.coding[0].display}</p>
+                        </div>
                     `).join('');
 
                     // Impfungen anzeigen
                     immunizationInfo.innerHTML = immunizations.map(imm => `
-                        <p><span>Impfstoff:</span> ${imm.vaccineCode.coding[0].display}</p>
-                        <p><span>Datum:</span> ${imm.occurrenceDateTime}</p>
-                        <p><span>Lot-Nummer:</span> ${imm.lotNumber}</p>
-                        <p><span>Ort:</span> ${imm.location.display}</p>
+                        <div class="grid-item">
+                            <h2>Impfung</h2>
+                            <p><span>Impfstoff:</span> ${imm.vaccineCode.coding[0].display}</p>
+                            <p><span>Datum:</span> ${imm.occurrenceDateTime}</p>
+                            <p><span>Lot-Nummer:</span> ${imm.lotNumber}</p>
+                            <p><span>Ort:</span> ${imm.location.display}</p>
+                        </div>
                     `).join('');
 
                     // Allergien anzeigen
                     allergyInfo.innerHTML = allergies.map(all => `
-                        <p><span>Substanz:</span> ${all.code.coding[0].display}</p>
-                        <p><span>Reaktion:</span> ${all.reaction[0].manifestation[0].coding[0].display}</p>
-                        <p><span>Schweregrad:</span> ${all.reaction[0].severity}</p>
+                        <div class="grid-item">
+                            <h2>Allergie</h2>
+                            <p><span>Substanz:</span> ${all.code.coding[0].display}</p>
+                            <p><span>Reaktion:</span> ${all.reaction[0].manifestation[0].coding[0].display}</p>
+                            <p><span>Schweregrad:</span> ${all.reaction[0].severity}</p>
+                        </div>
                     `).join('');
 
                     // Problemliste anzeigen
                     conditionInfo.innerHTML = conditions.map(cond => `
-                        <p><span>Krankheit:</span> ${cond.code.coding[0].display}</p>
-                        <p><span>Status:</span> ${cond.clinicalStatus.coding[0].display}</p>
-                        <p><span>Verifizierungsstatus:</span> ${cond.verificationStatus.coding[0].display}</p>
-                        <p><span>Beginn:</span> ${cond.onsetDateTime}</p>
+                        <div class="grid-item">
+                            <h2>Problem</h2>
+                            <p><span>Krankheit:</span> ${cond.code.coding[0].display}</p>
+                            <p><span>Status:</span> ${cond.clinicalStatus.coding[0].display}</p>
+                            <p><span>Verifizierungsstatus:</span> ${cond.verificationStatus.coding[0].display}</p>
+                            <p><span>Beginn:</span> ${cond.onsetDateTime}</p>
+                        </div>
                     `).join('');
                 })
                 .catch(error => console.error('Fehler beim Laden der IPS-Daten:', error));
