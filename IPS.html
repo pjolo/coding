@@ -87,6 +87,10 @@
         <div id="allergy-info" class="content-block">
             <!-- Allergy Informationen werden hier dynamisch eingefügt -->
         </div>
+        <h2 class="section-title">Problemliste</h2>
+        <div id="condition-info" class="content-block">
+            <!-- Condition Informationen werden hier dynamisch eingefügt -->
+        </div>
     </div>
 
     <script>
@@ -95,6 +99,7 @@
             const medicationInfo = document.getElementById('medication-info');
             const immunizationInfo = document.getElementById('immunization-info');
             const allergyInfo = document.getElementById('allergy-info');
+            const conditionInfo = document.getElementById('condition-info');
 
             // IPS Daten laden
             fetch('ips.json')
@@ -104,6 +109,7 @@
                     const medicationStatements = data.entry.filter(entry => entry.resource.resourceType === 'MedicationStatement').map(entry => entry.resource);
                     const immunizations = data.entry.filter(entry => entry.resource.resourceType === 'Immunization').map(entry => entry.resource);
                     const allergies = data.entry.filter(entry => entry.resource.resourceType === 'AllergyIntolerance').map(entry => entry.resource);
+                    const conditions = data.entry.filter(entry => entry.resource.resourceType === 'Condition').map(entry => entry.resource);
 
                     // Patienteninformationen anzeigen
                     patientInfo.innerHTML = `
@@ -146,7 +152,9 @@
                         <p><span>Medikament:</span> ${med.medicationCodeableConcept.coding[0].display}</p>
                         <p><span>ATC-Code:</span> ${med.medicationCodeableConcept.coding[0].code}</p>
                         <p><span>Zeitraum:</span> ${med.effectivePeriod.start} - ${med.effectivePeriod.end}</p>
-                        <p><span>Dosierung:</span> ${med.dosage[0].text}</p>
+                        <p><span>Dosierung:</span> ${med.dosage[0].doseAndRate[0].doseQuantity.value} ${med.dosage[0].doseAndRate[0].doseQuantity.unit}</p>
+                        <p><span>Einnahmezeit:</span> ${med.dosage[0].timing.repeat.frequency} Mal pro ${med.dosage[0].timing.repeat.periodUnit}, um ${med.dosage[0].timing.repeat.timeOfDay.join(', ')}</p>
+                        <p><span>Route:</span> ${med.dosage[0].route.coding[0].display}</p>
                     `).join('');
 
                     // Impfungen anzeigen
@@ -162,6 +170,14 @@
                         <p><span>Substanz:</span> ${all.code.coding[0].display}</p>
                         <p><span>Reaktion:</span> ${all.reaction[0].manifestation[0].coding[0].display}</p>
                         <p><span>Schweregrad:</span> ${all.reaction[0].severity}</p>
+                    `).join('');
+
+                    // Problemliste anzeigen
+                    conditionInfo.innerHTML = conditions.map(cond => `
+                        <p><span>Krankheit:</span> ${cond.code.coding[0].display}</p>
+                        <p><span>Status:</span> ${cond.clinicalStatus.coding[0].display}</p>
+                        <p><span>Verifizierungsstatus:</span> ${cond.verificationStatus.coding[0].display}</p>
+                        <p><span>Beginn:</span> ${cond.onsetDateTime}</p>
                     `).join('');
                 })
                 .catch(error => console.error('Fehler beim Laden der IPS-Daten:', error));
