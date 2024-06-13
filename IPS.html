@@ -29,29 +29,18 @@
             border-bottom: 2px solid #ddd;
             padding-bottom: 10px;
         }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .content-block {
             margin-top: 20px;
         }
-        .grid-item {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .grid-item h2 {
+        .content-block h2 {
             color: #666;
-            margin-top: 0;
         }
-        .grid-item p {
+        .content-block p {
             line-height: 1.6;
             color: #555;
             margin: 5px 0;
         }
-        .grid-item span {
+        .content-block span {
             font-weight: bold;
             color: #333;
         }
@@ -60,19 +49,19 @@
 <body>
     <div class="container">
         <h1>International Patient Summary</h1>
-        <div id="patient-info" class="grid-container">
+        <div id="patient-info" class="content-block">
             <!-- Patienteninformationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Medikation</h2>
-        <div id="medication-info" class="grid-container">
+        <div id="medication-info" class="content-block">
             <!-- Medication Informationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Impfungen</h2>
-        <div id="immunization-info" class="grid-container">
+        <div id="immunization-info" class="content-block">
             <!-- Immunization Informationen werden hier dynamisch eingefügt -->
         </div>
         <h2 class="section-title">Allergien</h2>
-        <div id="allergy-info" class="grid-container">
+        <div id="allergy-info" class="content-block">
             <!-- Allergy Informationen werden hier dynamisch eingefügt -->
         </div>
     </div>
@@ -95,70 +84,47 @@
 
                     // Patienteninformationen anzeigen
                     patientInfo.innerHTML = `
-                        <div class="grid-item">
-                            <h2>Basisinformationen</h2>
-                            <p><span>Patienten ID:</span> ${patient.id}</p>
-                            <p><span>Offizielle ID:</span> ${patient.identifier[0].value}</p>
-                            <p><span>Aktiv:</span> ${patient.active ? 'Ja' : 'Nein'}</p>
-                        </div>
-                        <div class="grid-item">
-                            <h2>Name</h2>
-                            <p><span>Vollständiger Name:</span> ${patient.name[0].prefix[0]} ${patient.name[0].given.join(' ')} ${patient.name[0].family}</p>
-                        </div>
-                        <div class="grid-item">
-                            <h2>Kontakt</h2>
-                            <p><span>Telefon:</span> ${patient.telecom.find(t => t.system === 'phone').value}</p>
-                            <p><span>Email:</span> ${patient.telecom.find(t => t.system === 'email').value}</p>
-                        </div>
-                        <div class="grid-item">
-                            <h2>Demographische Daten</h2>
-                            <p><span>Geschlecht:</span> ${patient.gender === 'male' ? 'Männlich' : 'Weiblich'}</p>
-                            <p><span>Geburtsdatum:</span> ${patient.birthDate}</p>
-                        </div>
-                        <div class="grid-item">
-                            <h2>Adresse</h2>
-                            <p><span>Adresse:</span> ${patient.address[0].line[0]}, ${patient.address[0].postalCode} ${patient.address[0].city}, ${patient.address[0].country}</p>
-                        </div>
-                        <div class="grid-item">
-                            <h2>Familienstand</h2>
-                            <p><span>Familienstand:</span> ${patient.maritalStatus.coding[0].display}</p>
-                        </div>
-                        <div class="grid-item">
-                            <h2>Sprache</h2>
-                            <p><span>Bevorzugte Sprache:</span> ${patient.communication[0].language.coding[0].display}</p>
-                        </div>
+                        <h2>Basisinformationen</h2>
+                        <p><span>Patienten ID:</span> ${patient.id}</p>
+                        <p><span>Offizielle ID:</span> ${patient.identifier[0].value}</p>
+                        <p><span>Aktiv:</span> ${patient.active ? 'Ja' : 'Nein'}</p>
+                        <h2>Name</h2>
+                        <p><span>Vollständiger Name:</span> ${patient.name[0].prefix[0]} ${patient.name[0].given.join(' ')} ${patient.name[0].family}</p>
+                        <h2>Kontakt</h2>
+                        <p><span>Telefon:</span> ${patient.telecom.find(t => t.system === 'phone').value}</p>
+                        <p><span>Email:</span> ${patient.telecom.find(t => t.system === 'email').value}</p>
+                        <h2>Demographische Daten</h2>
+                        <p><span>Geschlecht:</span> ${patient.gender === 'male' ? 'Männlich' : 'Weiblich'}</p>
+                        <p><span>Geburtsdatum:</span> ${patient.birthDate}</p>
+                        <h2>Adresse</h2>
+                        <p><span>Adresse:</span> ${patient.address[0].line[0]}, ${patient.address[0].postalCode} ${patient.address[0].city}, ${patient.address[0].country}</p>
+                        <h2>Familienstand</h2>
+                        <p><span>Familienstand:</span> ${patient.maritalStatus.coding[0].display}</p>
+                        <h2>Sprache</h2>
+                        <p><span>Bevorzugte Sprache:</span> ${patient.communication[0].language.coding[0].display}</p>
                     `;
 
                     // Medikation anzeigen
                     medicationInfo.innerHTML = medicationStatements.map(med => `
-                        <div class="grid-item">
-                            <h2>Medikation</h2>
-                            <p><span>Medikament:</span> ${med.medicationCodeableConcept.coding[0].display}</p>
-                            <p><span>ATC-Code:</span> ${med.medicationCodeableConcept.coding[0].code}</p>
-                            <p><span>Zeitraum:</span> ${med.effectivePeriod.start} - ${med.effectivePeriod.end}</p>
-                            <p><span>Dosierung:</span> ${med.dosage[0].text}</p>
-                        </div>
+                        <p><span>Medikament:</span> ${med.medicationCodeableConcept.coding[0].display}</p>
+                        <p><span>ATC-Code:</span> ${med.medicationCodeableConcept.coding[0].code}</p>
+                        <p><span>Zeitraum:</span> ${med.effectivePeriod.start} - ${med.effectivePeriod.end}</p>
+                        <p><span>Dosierung:</span> ${med.dosage[0].text}</p>
                     `).join('');
 
                     // Impfungen anzeigen
                     immunizationInfo.innerHTML = immunizations.map(imm => `
-                        <div class="grid-item">
-                            <h2>Impfung</h2>
-                            <p><span>Impfstoff:</span> ${imm.vaccineCode.coding[0].display}</p>
-                            <p><span>Datum:</span> ${imm.occurrenceDateTime}</p>
-                            <p><span>Lot-Nummer:</span> ${imm.lotNumber}</p>
-                            <p><span>Ort:</span> ${imm.location.display}</p>
-                        </div>
+                        <p><span>Impfstoff:</span> ${imm.vaccineCode.coding[0].display}</p>
+                        <p><span>Datum:</span> ${imm.occurrenceDateTime}</p>
+                        <p><span>Lot-Nummer:</span> ${imm.lotNumber}</p>
+                        <p><span>Ort:</span> ${imm.location.display}</p>
                     `).join('');
 
                     // Allergien anzeigen
                     allergyInfo.innerHTML = allergies.map(all => `
-                        <div class="grid-item">
-                            <h2>Allergie</h2>
-                            <p><span>Substanz:</span> ${all.code.coding[0].display}</p>
-                            <p><span>Reaktion:</span> ${all.reaction[0].manifestation[0].coding[0].display}</p>
-                            <p><span>Schweregrad:</span> ${all.reaction[0].severity}</p>
-                        </div>
+                        <p><span>Substanz:</span> ${all.code.coding[0].display}</p>
+                        <p><span>Reaktion:</span> ${all.reaction[0].manifestation[0].coding[0].display}</p>
+                        <p><span>Schweregrad:</span> ${all.reaction[0].severity}</p>
                     `).join('');
                 })
                 .catch(error => console.error('Fehler beim Laden der IPS-Daten:', error));
