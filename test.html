@@ -165,7 +165,7 @@
             ]
         };
 
-        function createTile(title, content) {
+        function createTile(title, content) {e
             return `
                 <div class="grid-item">
                     <h2>${title}</h2>
@@ -177,18 +177,14 @@
         function displayFHIRResource(json) {
             const container = document.getElementById('fhir-resource');
             container.innerHTML = `
-                ${createTile('Resource Type', json.resourceType)}
-                ${createTile('ID', json.id)}
-                ${createTile('Profile', json.meta.profile.join(', '))}
                 ${createTile('Name', `${json.name[0].given.join(' ')} ${json.name[0].family}`)}
-                ${createTile('Gender', json.gender)}
-                ${createTile('Birth Date', json.birthDate)}
-                ${createTile('Marital Status', json.maritalStatus.coding[0].display)}
-                ${createTile('Language', `${json.communication[0].language.text} (preferred: ${json.communication[0].preferred})`)}
-                ${createTile('Birth Place', `${json.extension[0].valueAddress.city}, ${json.extension[0].valueAddress.country}`)}
-                ${createTile('Place of Origin', `${json.extension[1].valueAddress.city}, ${json.extension[1].valueAddress.state}`)}
+                ${createTile('Geschlecht', json.gender)}
+                ${createTile('Geburtsdatum', json.birthDate)}
+                ${createTile('Zivilstand', json.maritalStatus.coding[0].display)}
+                ${createTile('Bevorzugte Sprache', `${json.communication[0].language.text} (preferred: ${json.communication[0].preferred})`)}
+                ${createTile('Geburtsort', `${json.extension[0].valueAddress.city}, ${json.extension[0].valueAddress.country}`)}
+                ${createTile('Heimatort', `${json.extension[1].valueAddress.city}, ${json.extension[1].valueAddress.state}`)}
                 ${createTile('Religion', json.extension[2].valueCodeableConcept.coding[0].display)}
-                ${createTile('Identifier', json.identifier[0].value)}
             `;
         }
 
