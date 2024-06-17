@@ -55,25 +55,20 @@
             font-weight: bold;
             color: #333;
         }
-        .content-block {
-            margin-top: 20px;
-        }
-        .content-block p {
-            line-height: 1.6;
-            color: #555;
-            margin: 5px 0;
-        }
-        .content-block span {
-            font-weight: bold;
-            color: #333;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>FHIR JSON Viewer</h1>
-        <div id="patient-resource" class="grid-container"></div>
-        <div id="medication-resource" class="grid-container"></div>
+        <section id="patient-section">
+            <h2 class="section-title">Patient</h2>
+            <div id="patient-resource" class="grid-container"></div>
+        </section>
+        
+        <section id="medication-section">
+            <h2 class="section-title">Medication</h2>
+            <div id="medication-resource" class="grid-container"></div>
+        </section>
     </div>
 
     <script>
@@ -215,32 +210,10 @@
             `;
         }
 
-        function displayFHIRResource(json, containerId) {
-            const container = document.getElementById(containerId);
-            if (json.resourceType === 'Patient') {
-                container.innerHTML = `
-                    ${createTile('Name', `${json.name[0].given.join(' ')} ${json.name[0].family}`)}
-                    ${createTile('Geschlecht', json.gender)}
-                    ${createTile('Geburtsdatum', json.birthDate)}
-                    ${createTile('Zivilstand', json.maritalStatus.coding[0].display)}
-                    ${createTile('Bevorzugte Sprache', `${json.communication[0].language.text} (preferred: ${json.communication[0].preferred})`)}
-                    ${createTile('Geburtsort', `${json.extension[0].valueAddress.city}, ${json.extension[0].valueAddress.country}`)}
-                    ${createTile('Heimatort', `${json.extension[1].valueAddress.city}, ${json.extension[1].valueAddress.state}`)}
-                    ${createTile('Religion', json.extension[2].valueCodeableConcept.coding[0].display)}
-                `;
-            } else if (json.resourceType === 'Medication') {
-                container.innerHTML = `
-                    ${createTile('Name', json.code.text)}
-                    ${createTile('Status', json.status)}
-                    ${createTile('Form', json.form.text)}
-                    ${createTile('Menge', `${json.amount.value} ${json.amount.unit}`)}
-                    ${createTile('Hersteller', json.manufacturer.reference)}
-                `;
-            }
-        }
-
-        displayFHIRResource(patientJson, 'patient-resource');
-        displayFHIRResource(medicationJson, 'medication-resource');
-    </script>
-</body>
-</html>
+        function displayPatientResource(json) {
+            const container = document.getElementById('patient-resource');
+            container.innerHTML = `
+                ${createTile('Name', `${json.name[0].given} ${json.name[0].family}`)}
+                ${createTile('Geschlecht', json.gender)}
+                ${createTile('Geburtsdatum', json.birthDate)}
+                ${createTile('Familienstand', json.maritalStatus.coding[0].display
