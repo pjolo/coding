@@ -1,80 +1,77 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FHIR-Ressource JSON in Kacheln</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .tile {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin: 10px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .tile-icon {
-      font-size: 24px;
-      margin-bottom: 5px;
-    }
-
-    .tile-value {
-      font-weight: bold;
-    }
-
-    .tile-details {
-      display: none;
-      padding: 15px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR JSON Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        pre {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        .fhir-resource {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div id="app" class="container"></div>
+    <div class="container">
+        <h1>FHIR JSON Viewer</h1>
+        <div id="fhir-resource" class="fhir-resource"></div>
+    </div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    const app = $('#app');
+    <script>
+        const fhirJson = {
+            "resourceType": "Patient",
+            "id": "example",
+            "text": {
+                "status": "generated",
+                "div": "<div>John Doe</div>"
+            },
+            "identifier": [{
+                "use": "usual",
+                "type": {
+                    "coding": [{
+                        "system": "http://hl7.org/fhir/v2/0203",
+                        "code": "MR"
+                    }]
+                },
+                "system": "http://hospital.smarthealthit.org",
+                "value": "12345"
+            }],
+            "active": true,
+            "name": [{
+                "use": "official",
+                "family": "Doe",
+                "given": ["John", "A."]
+            }],
+            "gender": "male",
+            "birthDate": "1974-12-25"
+        };
 
-    // FHIR-Ressource von URL laden
-    const resourceUrl = 'https://fhir.example.org/resources/Patient/12345';
-
-    $.ajax({
-      url: resourceUrl,
-      dataType: 'json',
-      success: function(resourceJSON) {
-        // Daten in Kacheln rendern
-        renderTiles(resourceJSON);
-      }
-    });
-
-    function renderTiles(resourceJSON) {
-      for (const property in resourceJSON) {
-        const tile = $('<div>').addClass('tile');
-
-        const iconClass = getIconClass(property);
-        const icon = $('<span>').addClass('tile-icon fas ' + iconClass);
-
-        const value = $('<span>').addClass('tile-value').text(resourceJSON[property]);
-
-        const details = <span class="math-inline">\('<div\>'\)\.addClass\('tile\-details'\);
-details\.append\(</span>('<h4>').text(property));
-        details.append($('<pre>').text(JSON.stringify(resourceJSON[property], null, 2)));
-
-        tile.append(icon, value);
-        tile.click(function() {
-          $(this).find('.tile-details').toggle();
-        });
-
-        app.append(tile);
-      }
-    }
-
-    function getIconClass(property) {
-      switch (property) {
-        case 'id':
-          return 'fa-id-card';
+        document.getElementById('fhir-resource').innerHTML = `
+            <h2>Resource Type: ${fhirJson.resourceType}</h2>
+            <pre>${JSON.stringify(fhirJson, null, 2)}</pre>
+        `;
+    </script>
+</body>
+</html>
