@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FHIR-Ressource JSON in Kacheln</title>
+  <style>
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .tile {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container"></div>
+
+  <script>
+    const app = document.getElementById('app');
+
+    // JSON-Daten laden und parsen
+    const resourceJSON = {
+      "resourceType": "Patient",
+      "id": "12345",
+      "given": ["Peter", "John"],
+      "family": "Doe",
+      "birthDate": "1980-01-01"
+    };
+
+    // Daten in Kacheln rendern
+    for (const property in resourceJSON) {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+
+      const label = document.createElement('span');
+      label.textContent = property + ':';
+
+      const value = document.createElement('span');
+      value.textContent = resourceJSON[property];
+
+      tile.appendChild(label);
+      tile.appendChild(value);
+
+      app.appendChild(tile);
+    }
+  </script>
+</body>
+</html>
