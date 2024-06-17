@@ -72,11 +72,12 @@
 <body>
     <div class="container">
         <h1>FHIR JSON Viewer</h1>
-        <div id="fhir-resource" class="grid-container"></div>
+        <div id="patient-resource" class="grid-container"></div>
+        <div id="medication-resource" class="grid-container"></div>
     </div>
 
     <script>
-        const fhirJson = {
+        const patientJson = {
             "resourceType": "Patient",
             "id": "FranzMuster",
             "meta": {
@@ -165,6 +166,46 @@
             ]
         };
 
+        const medicationJson = {
+            "resourceType": "Medication",
+            "id": "example-medication",
+            "meta": {
+                "profile": [
+                    "http://hl7.org/fhir/StructureDefinition/Medication"
+                ]
+            },
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                        "code": "1049502",
+                        "display": "Amoxicillin 250mg/5ml"
+                    }
+                ],
+                "text": "Amoxicillin 250mg/5ml"
+            },
+            "status": "active",
+            "manufacturer": {
+                "reference": "Organization/example"
+            },
+            "form": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm",
+                        "code": "POWDER",
+                        "display": "Powder"
+                    }
+                ],
+                "text": "Powder"
+            },
+            "amount": {
+                "value": 100,
+                "unit": "mg",
+                "system": "http://unitsofmeasure.org",
+                "code": "mg"
+            }
+        };
+
         function createTile(title, content) {
             return `
                 <div class="grid-item">
@@ -174,21 +215,32 @@
             `;
         }
 
-        function displayFHIRResource(json) {
-            const container = document.getElementById('fhir-resource');
-            container.innerHTML = `
-                ${createTile('Name', `${json.name[0].given.join(' ')} ${json.name[0].family}`)}
-                ${createTile('Geschlecht', json.gender)}
-                ${createTile('Geburtsdatum', json.birthDate)}
-                ${createTile('Zivilstand', json.maritalStatus.coding[0].display)}
-                ${createTile('Bevorzugte Sprache', `${json.communication[0].language.text} (preferred: ${json.communication[0].preferred})`)}
-                ${createTile('Geburtsort', `${json.extension[0].valueAddress.city}, ${json.extension[0].valueAddress.country}`)}
-                ${createTile('Heimatort', `${json.extension[1].valueAddress.city}, ${json.extension[1].valueAddress.state}`)}
-                ${createTile('Religion', json.extension[2].valueCodeableConcept.coding[0].display)}
-            `;
+        function displayFHIRResource(json, containerId) {
+            const container = document.getElementById(containerId);
+            if (json.resourceType === 'Patient') {
+                container.innerHTML = `
+                    ${createTile('Name', `${json.name[0].given.join(' ')} ${json.name[0].family}`)}
+                    ${createTile('Geschlecht', json.gender)}
+                    ${createTile('Geburtsdatum', json.birthDate)}
+                    ${createTile('Zivilstand', json.maritalStatus.coding[0].display)}
+                    ${createTile('Bevorzugte Sprache', `${json.communication[0].language.text} (preferred: ${json.communication[0].preferred})`)}
+                    ${createTile('Geburtsort', `${json.extension[0].valueAddress.city}, ${json.extension[0].valueAddress.country}`)}
+                    ${createTile('Heimatort', `${json.extension[1].valueAddress.city}, ${json.extension[1].valueAddress.state}`)}
+                    ${createTile('Religion', json.extension[2].valueCodeableConcept.coding[0].display)}
+                `;
+            } else if (json.resourceType === 'Medication') {
+                container.innerHTML = `
+                    ${createTile('Name', json.code.text)}
+                    ${createTile('Status', json.status)}
+                    ${createTile('Form', json.form.text)}
+                    ${createTile('Menge', `${json.amount.value} ${json.amount.unit}`)}
+                    ${createTile('Hersteller', json.manufacturer.reference)}
+                `;
+            }
         }
 
-        displayFHIRResource(fhirJson);
+        displayFHIRResource(patientJson, 'patient-resource');
+        displayFHIRResource(medicationJson, 'medication-resource');
     </script>
 </body>
 </html>
