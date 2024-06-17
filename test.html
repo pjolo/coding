@@ -12,7 +12,7 @@
             background-color: #f4f4f9;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: auto;
             background: #fff;
             padding: 20px;
@@ -22,14 +22,19 @@
         h1 {
             color: #333;
         }
-        pre {
-            background: #f1f1f1;
-            padding: 15px;
-            border-radius: 5px;
-            overflow: auto;
-        }
         .fhir-resource {
-            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .tile {
+            background: #f1f1f1;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .tile h2 {
+            margin-top: 0;
         }
     </style>
 </head>
@@ -68,10 +73,29 @@
             "birthDate": "1974-12-25"
         };
 
-        document.getElementById('fhir-resource').innerHTML = `
-            <h2>Resource Type: ${fhirJson.resourceType}</h2>
-            <pre>${JSON.stringify(fhirJson, null, 2)}</pre>
-        `;
+        function createTile(title, content) {
+            return `
+                <div class="tile">
+                    <h2>${title}</h2>
+                    <p>${content}</p>
+                </div>
+            `;
+        }
+
+        function displayFHIRResource(json) {
+            const container = document.getElementById('fhir-resource');
+            container.innerHTML = `
+                ${createTile('Resource Type', json.resourceType)}
+                ${createTile('ID', json.id)}
+                ${createTile('Status', json.text.status)}
+                ${createTile('Name', `${json.name[0].given.join(' ')} ${json.name[0].family}`)}
+                ${createTile('Gender', json.gender)}
+                ${createTile('Birth Date', json.birthDate)}
+                ${createTile('Identifier', json.identifier[0].value)}
+            `;
+        }
+
+        displayFHIRResource(fhirJson);
     </script>
 </body>
 </html>
